@@ -3,6 +3,8 @@
 namespace Sunxyw\MinecraftProtocol;
 
 use Illuminate\Support\ServiceProvider;
+use Sunxyw\MinecraftProtocol\Drivers\DriverInterface;
+use Sunxyw\MinecraftProtocol\Drivers\RemoteConsoleDriver;
 
 class MinecraftProtocolServiceProvider extends ServiceProvider
 {
@@ -31,11 +33,17 @@ class MinecraftProtocolServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/minecraft-protocol.php', 'minecraft-protocol');
+        $this->mergeConfigFrom(__DIR__ . '/../config/minecraft-protocol.php', 'minecraft-protocol');
 
         // Register the service the package provides.
-        $this->app->singleton('minecraft-protocol', function ($app) {
-            return new MinecraftProtocol;
+        $this->app->singleton('minecraft-protocol', function (): DriverInterface {
+            /** @var DriverInterface $driver */
+            $driver = config('minecraft-protocol.driver');
+            return new $driver(
+                config('minecraft-protocol.host'),
+                config('minecraft-protocol.port'),
+                config('minecraft-protocol.password')
+            );
         });
     }
 
@@ -44,7 +52,7 @@ class MinecraftProtocolServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return ['minecraft-protocol'];
     }
@@ -58,7 +66,7 @@ class MinecraftProtocolServiceProvider extends ServiceProvider
     {
         // Publishing the configuration file.
         $this->publishes([
-            __DIR__.'/../config/minecraft-protocol.php' => config_path('minecraft-protocol.php'),
+            __DIR__ . '/../config/minecraft-protocol.php' => config_path('minecraft-protocol.php'),
         ], 'minecraft-protocol.config');
 
         // Publishing the views.
