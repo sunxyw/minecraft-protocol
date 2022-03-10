@@ -1,0 +1,46 @@
+{
+    "name": "sunxyw/minecraft-protocol",
+    "description": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "sunxyw",
+            "email": "xy2496419818@gmail.com",
+            "homepage": "https://www.sunxyw.xyz"
+        }
+    ],
+    "homepage": "https://github.com/sunxyw/minecraft-protocol",
+    "keywords": [
+        "laravel",
+        "protocol",
+        "minecraft"
+    ],
+    "require": {
+        "illuminate/support": "~9"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "phpunit/phpunit": "~9.0",
+        "orchestra/testbench": "~9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sunxyw\\MinecraftProtocol\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sunxyw\\MinecraftProtocol\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sunxyw\\MinecraftProtocol\\MinecraftProtocolServiceProvider"
+            ],
+            "aliases": {
+                "MinecraftProtocol": "Sunxyw\\MinecraftProtocol\\Facades\\MinecraftProtocol"
+            }
+        }
+    }
+}
