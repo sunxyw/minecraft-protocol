@@ -4,7 +4,6 @@ namespace Sunxyw\MinecraftProtocol;
 
 use Illuminate\Support\ServiceProvider;
 use Sunxyw\MinecraftProtocol\Drivers\DriverInterface;
-use Sunxyw\MinecraftProtocol\Drivers\RemoteConsoleDriver;
 
 class MinecraftProtocolServiceProvider extends ServiceProvider
 {
@@ -15,11 +14,6 @@ class MinecraftProtocolServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'sunxyw');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'sunxyw');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
-
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
             $this->bootForConsole();
@@ -68,23 +62,5 @@ class MinecraftProtocolServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/minecraft-protocol.php' => config_path('minecraft-protocol.php'),
         ], 'minecraft-protocol.config');
-
-        // Publishing the views.
-        /*$this->publishes([
-            __DIR__.'/../resources/views' => base_path('resources/views/vendor/sunxyw'),
-        ], 'minecraft-protocol.views');*/
-
-        // Publishing assets.
-        /*$this->publishes([
-            __DIR__.'/../resources/assets' => public_path('vendor/sunxyw'),
-        ], 'minecraft-protocol.views');*/
-
-        // Publishing the translation files.
-        /*$this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/sunxyw'),
-        ], 'minecraft-protocol.views');*/
-
-        // Registering package commands.
-        // $this->commands([]);
     }
 }
