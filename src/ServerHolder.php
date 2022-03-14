@@ -15,7 +15,7 @@ class ServerHolder
     private Config $config;
 
     #[ArrayShape(['string' => DriverInterface::class])]
-    private array $servers;
+    private array $servers = [];
 
     private function __construct()
     {
