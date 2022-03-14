@@ -2,8 +2,20 @@
 
 namespace Sunxyw\MinecraftProtocol\Drivers;
 
+use JetBrains\PhpStorm\ExpectedValues;
+
+/**
+ * Interface DriverInterface.
+ */
 interface DriverInterface
 {
+    /**
+     * Driver constructor.
+     *
+     * @param $host
+     * @param $port
+     * @param $password
+     */
     public function __construct($host, $port, $password);
 
     /**
@@ -46,7 +58,7 @@ interface DriverInterface
      * @param string $player
      * @return void
      */
-    public function operateWhitelist(string $action, string $player): void;
+    public function operateWhitelist(#[ExpectedValues(['add', 'remove'])] string $action, string $player): void;
 
     /**
      * Operate player's ban.
@@ -55,5 +67,5 @@ interface DriverInterface
      * @param string $player
      * @return void
      */
-    public function operateBan(string $action, string $player): void;
+    public function operateBan(#[ExpectedValues(['add', 'remove'])] string $action, string $player): void;
 }

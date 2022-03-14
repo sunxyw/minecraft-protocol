@@ -4,6 +4,9 @@ namespace Sunxyw\MinecraftProtocol;
 
 use InvalidArgumentException;
 
+/**
+ * Class MinecraftUtils.
+ */
 class MinecraftUtils
 {
     /**
@@ -44,7 +47,7 @@ class MinecraftUtils
     }
 
     /**
-     * Encode a string to a Minecraft-compatible component string.
+     * Build a Minecraft-compatible component string.
      *
      * @param $text
      * @param string $color
@@ -55,7 +58,7 @@ class MinecraftUtils
      * @param bool $obfuscate
      * @return string
      */
-    public static function encodeComponent($text, string $color = 'gray', bool $bold = false, bool $italic = false, bool $underlined = false, bool $strikethrough = false, bool $obfuscate = false): string
+    public static function buildComponent($text, string $color = 'gray', bool $bold = false, bool $italic = false, bool $underlined = false, bool $strikethrough = false, bool $obfuscate = false): string
     {
         $component = '{';
         $component .= '"text":"' . $text . '",';
@@ -68,5 +71,16 @@ class MinecraftUtils
         $component = rtrim($component, ',');
         $component .= '}';
         return $component;
+    }
+
+    /**
+     * Build a Minecraft-compatible components string.
+     *
+     * @param array $components components, array of string returned by buildComponent(), or valid component json string
+     * @return string
+     */
+    public static function buildComponentArray(array $components): string
+    {
+        return '[' . implode(',', $components) . ']';
     }
 }

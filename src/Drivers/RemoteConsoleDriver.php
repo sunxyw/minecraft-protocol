@@ -2,14 +2,20 @@
 
 namespace Sunxyw\MinecraftProtocol\Drivers;
 
+use JetBrains\PhpStorm\ExpectedValues;
 use Sunxyw\MinecraftProtocol\MinecraftUtils;
 use xPaw\SourceQuery\Exception\SourceQueryException;
 use xPaw\SourceQuery\SourceQuery;
 
+/**
+ * Class RemoteConsoleDriver.
+ * supports remote console (rcon) protocol.
+ */
 class RemoteConsoleDriver implements DriverInterface
 {
     private SourceQuery $connection;
 
+    /** {@inheritDoc} */
     public function __construct($host, $port, $password)
     {
         try {
@@ -21,6 +27,7 @@ class RemoteConsoleDriver implements DriverInterface
         }
     }
 
+    /** {@inheritDoc} */
     public function dispatchCommand(string $command, array $args = []): string
     {
         try {
@@ -30,14 +37,10 @@ class RemoteConsoleDriver implements DriverInterface
         }
     }
 
+    /** {@inheritDoc} */
     public function getOnlinePlayers(): array
     {
-//        $raw_list = $this->dispatchCommand('list');
-        $raw_list = <<<EOT
-当前有 1 个玩家在线,最大在线人数为 2,021 个玩家.
-Introduction: [夕阳]sunxyw
-Primary: [初建]Acent
-EOT;
+        $raw_list = $this->dispatchCommand('list');
 
         if (empty($raw_list)) {
             return [];
@@ -47,45 +50,54 @@ EOT;
         return MinecraftUtils::parsePlayers($raw_list);
     }
 
-    public function broadcast(string $message): void
+    /** {@inheritDoc} */
+    public function broadcast(string $message, string $prefix = null): void
     {
-        $prefix = MinecraftUtils::encodeComponent('Prefix here', 'light_purple');
-        $content = MinecraftUtils::encodeComponent('Content here');
-        $this->dispatchCommand("tellraw @a [\"\",{$prefix},{$content}]");
+        if (!empty($prefix)) {
+            $prefix = MinecraftUtils::buildComponent('Prefix here', 'light_purple');
+        } else {
+            $prefix = '';
+        }
+        $content = MinecraftUtils::buildComponent($message);
+        $arg = MinecraftUtils::buildComponentArray(['\"\"', $prefix, $content]);
+        $this->dispatchCommand("tellraw @a $arg");
     }
 
+    /** {@inheritDoc} */
     public function assignRole(string $player, string $role): void
     {
         MinecraftUtils::validateUsername($player);
         $role = strtolower($role);
         $allowed_roles = ['primary', 'introduction'];
         if (!in_array($role, $allowed_roles)) {
-            throw new \InvalidArgumentException("Role {$role} is not allowed");
+            throw new \InvalidArgumentException("Role $role is not allowed");
         }
         // TODO: support others permission plugin
-        $this->dispatchCommand("manuadd {$player} {$role}");
+        $this->dispatchCommand("manuadd $player $role");
     }
 
-    public function operateWhitelist(string $action, string $player): void
+    /** {@inheritDoc} */
+    public function operateWhitelist(#[ExpectedValues(['add', 'remove'])] string $action, string $player): void
     {
         MinecraftUtils::validateUsername($player);
         $action = strtolower($action);
         $allowed_actions = ['add', 'remove'];
         if (!in_array($action, $allowed_actions)) {
-            throw new \InvalidArgumentException("Action {$action} is not allowed");
+            throw new \InvalidArgumentException("Action $action is not allowed");
         }
-        $this->dispatchCommand("whitelist {$action} {$player}");
+        $this->dispatchCommand("whitelist $action $player");
     }
 
-    public function operateBan(string $action, string $player): void
+    /** {@inheritDoc} */
+    public function operateBan(#[ExpectedValues(['add', 'remove'])] string $action, string $player): void
     {
         MinecraftUtils::validateUsername($player);
         $action = strtolower($action);
         $allowed_actions = ['add' => 'ban', 'remove' => 'pardon'];
         if (!array_key_exists($action, $allowed_actions)) {
-            throw new \InvalidArgumentException("Action {$action} is not allowed");
+            throw new \InvalidArgumentException("Action $action is not allowed");
         }
         $action = $allowed_actions[$action];
-        $this->dispatchCommand("{$action} {$player}");
+        $this->dispatchCommand("$action $player");
     }
 }
