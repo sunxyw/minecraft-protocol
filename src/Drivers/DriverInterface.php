@@ -3,7 +3,7 @@
 namespace Sunxyw\MinecraftProtocol\Drivers;
 
 use JetBrains\PhpStorm\ExpectedValues;
-use Sunxyw\MinecraftProtocol\Config;
+use Sunxyw\MinecraftProtocol\ServerConfig;
 
 /**
  * Interface DriverInterface.
@@ -13,9 +13,9 @@ interface DriverInterface
     /**
      * Driver constructor.
      *
-     * @param Config $config
+     * @param ServerConfig $config
      */
-    public function __construct(Config $config);
+    public function __construct(ServerConfig $config);
 
     /**
      * Dispatch a command to the server.

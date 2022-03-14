@@ -2,20 +2,36 @@
 
 namespace Sunxyw\MinecraftProtocol;
 
+use JetBrains\PhpStorm\ArrayShape;
+
 /**
  * Class Config.
  */
 class Config
 {
-    public string $host;
+    #[ArrayShape(['string' => ServerConfig::class])]
+    private array $servers;
 
-    public int $port;
+    /**
+     * Add server config.
+     *
+     * @param string $name
+     * @param ServerConfig $config
+     * @return void
+     */
+    public function addServer(string $name, ServerConfig $config): void
+    {
+        $this->servers[$name] = $config;
+    }
 
-    public string $password;
-
-    public array $allowedRoles;
-
-    public string $assignRoleCommand;
-
-    public string $removeRoleCommand;
+    /**
+     * Get the config of a server.
+     *
+     * @param string $name
+     * @return ServerConfig
+     */
+    public function getServer(string $name): ServerConfig
+    {
+        return $this->servers[$name];
+    }
 }

@@ -3,8 +3,8 @@
 namespace Sunxyw\MinecraftProtocol\Drivers;
 
 use JetBrains\PhpStorm\ExpectedValues;
-use Sunxyw\MinecraftProtocol\Config;
 use Sunxyw\MinecraftProtocol\MinecraftUtils;
+use Sunxyw\MinecraftProtocol\ServerConfig;
 use xPaw\SourceQuery\Exception\SourceQueryException;
 use xPaw\SourceQuery\SourceQuery;
 
@@ -16,10 +16,10 @@ class RemoteConsoleDriver implements DriverInterface
 {
     private SourceQuery $connection;
 
-    private Config $config;
+    private ServerConfig $config;
 
     /** {@inheritDoc} */
-    public function __construct(Config $config)
+    public function __construct(ServerConfig $config)
     {
         try {
             $this->connection = new SourceQuery();
