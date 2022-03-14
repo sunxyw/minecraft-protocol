@@ -3,6 +3,7 @@
 namespace Sunxyw\MinecraftProtocol\Drivers;
 
 use JetBrains\PhpStorm\ExpectedValues;
+use Sunxyw\MinecraftProtocol\Config;
 use Sunxyw\MinecraftProtocol\MinecraftUtils;
 use xPaw\SourceQuery\Exception\SourceQueryException;
 use xPaw\SourceQuery\SourceQuery;
@@ -15,13 +16,16 @@ class RemoteConsoleDriver implements DriverInterface
 {
     private SourceQuery $connection;
 
+    private Config $config;
+
     /** {@inheritDoc} */
-    public function __construct($host, $port, $password)
+    public function __construct(Config $config)
     {
         try {
             $this->connection = new SourceQuery();
-            $this->connection->Connect($host, $port);
-            $this->connection->SetRconPassword($password);
+            $this->connection->Connect($config->host, $config->port);
+            $this->connection->SetRconPassword($config->password);
+            $this->config = $config;
         } catch (SourceQueryException $e) {
             throw new \RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
@@ -54,7 +58,7 @@ class RemoteConsoleDriver implements DriverInterface
     public function broadcast(string $message, string $prefix = null): void
     {
         if (!empty($prefix)) {
-            $prefix = MinecraftUtils::buildComponent('Prefix here', 'light_purple');
+            $prefix = MinecraftUtils::buildComponent($prefix, 'light_purple');
         } else {
             $prefix = '';
         }
@@ -68,12 +72,25 @@ class RemoteConsoleDriver implements DriverInterface
     {
         MinecraftUtils::validateUsername($player);
         $role = strtolower($role);
-        $allowed_roles = ['primary', 'introduction'];
-        if (!in_array($role, $allowed_roles)) {
+        if (!in_array($role, $this->config->allowedRoles, true)) {
             throw new \InvalidArgumentException("Role $role is not allowed");
         }
-        // TODO: support others permission plugin
-        $this->dispatchCommand("manuadd $player $role");
+        $command = $this->config->assignRoleCommand;
+        $command = str_replace(['{player}', '{role}'], [$player, $role], $command);
+        $this->dispatchCommand($command);
+    }
+
+    /** {@inheritDoc} */
+    public function removeRole(string $player, string $role): void
+    {
+        MinecraftUtils::validateUsername($player);
+        $role = strtolower($role);
+        if (!in_array($role, $this->config->allowedRoles, true)) {
+            throw new \InvalidArgumentException("Role $role is not allowed");
+        }
+        $command = $this->config->removeRoleCommand;
+        $command = str_replace(['{player}', '{role}'], [$player, $role], $command);
+        $this->dispatchCommand($command);
     }
 
     /** {@inheritDoc} */

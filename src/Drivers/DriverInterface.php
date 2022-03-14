@@ -3,6 +3,7 @@
 namespace Sunxyw\MinecraftProtocol\Drivers;
 
 use JetBrains\PhpStorm\ExpectedValues;
+use Sunxyw\MinecraftProtocol\Config;
 
 /**
  * Interface DriverInterface.
@@ -12,11 +13,9 @@ interface DriverInterface
     /**
      * Driver constructor.
      *
-     * @param $host
-     * @param $port
-     * @param $password
+     * @param Config $config
      */
-    public function __construct($host, $port, $password);
+    public function __construct(Config $config);
 
     /**
      * Dispatch a command to the server.
@@ -50,6 +49,15 @@ interface DriverInterface
      * @return void
      */
     public function assignRole(string $player, string $role): void;
+
+    /**
+     * Remove a player from a role.
+     *
+     * @param string $player
+     * @param string $role
+     * @return void
+     */
+    public function removeRole(string $player, string $role): void;
 
     /**
      * Operate player's whitelist.
