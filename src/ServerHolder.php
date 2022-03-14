@@ -10,7 +10,7 @@ use Sunxyw\MinecraftProtocol\Drivers\DriverInterface;
  */
 class ServerHolder
 {
-    private static ServerHolder $instance;
+    private static ?ServerHolder $instance = null;
 
     private Config $config;
 
