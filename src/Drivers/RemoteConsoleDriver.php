@@ -72,7 +72,7 @@ class RemoteConsoleDriver implements DriverInterface
     {
         MinecraftUtils::validateUsername($player);
         $role = strtolower($role);
-        if (!in_array($role, $this->config->allowedRoles, true)) {
+        if (isset($this->config->allowedRoles) && !in_array($role, $this->config->allowedRoles, true)) {
             throw new \InvalidArgumentException("Role $role is not allowed");
         }
         $command = $this->config->assignRoleCommand;
@@ -85,7 +85,7 @@ class RemoteConsoleDriver implements DriverInterface
     {
         MinecraftUtils::validateUsername($player);
         $role = strtolower($role);
-        if (!in_array($role, $this->config->allowedRoles, true)) {
+        if (isset($this->config->allowedRoles) && !in_array($role, $this->config->allowedRoles, true)) {
             throw new \InvalidArgumentException("Role $role is not allowed");
         }
         $command = $this->config->removeRoleCommand;
