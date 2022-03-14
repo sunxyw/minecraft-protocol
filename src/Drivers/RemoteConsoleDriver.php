@@ -15,7 +15,7 @@ class RemoteConsoleDriver implements DriverInterface
         try {
             $this->connection = new SourceQuery();
             $this->connection->Connect($host, $port);
-            $this->connection->SetRconPassword($$password);
+            $this->connection->SetRconPassword($password);
         } catch (SourceQueryException $e) {
             throw new \RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
