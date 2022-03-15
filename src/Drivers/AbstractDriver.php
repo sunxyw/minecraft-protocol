@@ -2,11 +2,13 @@
 
 namespace Sunxyw\MinecraftProtocol\Drivers;
 
-use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ExpectedValues;
 use Sunxyw\MinecraftProtocol\MinecraftUtils;
 use Sunxyw\MinecraftProtocol\ServerConfig;
 
+/**
+ * Class AbstractDriver.
+ */
 abstract class AbstractDriver implements DriverInterface
 {
     protected ServerConfig $config;
@@ -47,10 +49,8 @@ abstract class AbstractDriver implements DriverInterface
      */
     protected function event(string $event, ...$args): void
     {
-        $event = str_replace('.', '_', $event);
-        $event = Str::camel('on_' . $event);
-        if (is_callable([$this->config, $event])) {
-            $this->config->{$event}(...$args);
+        foreach ($this->config->getListeners($event) as $listener) {
+            $listener(...$args);
         }
     }
 
@@ -64,8 +64,9 @@ abstract class AbstractDriver implements DriverInterface
      */
     protected function parsePlayers(string $players): array
     {
-        if (is_callable([$this->config, 'parsePlayers'])) {
-            return $this->config->parsePlayers($players);
+        if (isset($this->config->playerParser)) {
+            $parser = $this->config->playerParser;
+            return $parser($players);
         }
         return MinecraftUtils::parsePlayers($players);
     }
