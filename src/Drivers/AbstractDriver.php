@@ -47,7 +47,8 @@ abstract class AbstractDriver implements DriverInterface
      */
     protected function event(string $event, ...$args): void
     {
-        $event = Str::camel('on.' . $event);
+        $event = str_replace('.', '_', $event);
+        $event = Str::camel('on_' . $event);
         if (is_callable([$this->config, $event])) {
             $this->config->{$event}(...$args);
         }
