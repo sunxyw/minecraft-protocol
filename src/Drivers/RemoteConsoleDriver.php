@@ -31,6 +31,16 @@ class RemoteConsoleDriver implements DriverInterface
         }
     }
 
+    /**
+     * Get the internal connection.
+     *
+     * @return SourceQuery
+     */
+    public function getConnection(): SourceQuery
+    {
+        return $this->connection;
+    }
+
     /** {@inheritDoc} */
     public function dispatchCommand(string $command, array $args = []): string
     {

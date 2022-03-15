@@ -63,4 +63,18 @@ class ServerHolder
         }
         return self::getInstance()->servers[$name];
     }
+
+    /**
+     * Remove a server from the holder.
+     *
+     * @param string $name
+     * @return void
+     */
+    public static function resetServer(string $name): void
+    {
+        if (array_key_exists($name, self::getInstance()->servers)) {
+            unset(self::getInstance()->servers[$name]);
+        }
+    }
 }
+
