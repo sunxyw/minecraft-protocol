@@ -45,7 +45,9 @@ class RemoteConsoleDriver implements DriverInterface
     public function dispatchCommand(string $command, array $args = []): string
     {
         try {
-            return $this->connection->Rcon($command . ' ' . implode(' ', $args));
+            $result = $this->connection->Rcon($command . ' ' . implode(' ', $args));
+            $this->config->onCommandDispatched->call($this, $command, $args, $result);
+            return $result;
         } catch (SourceQueryException $e) {
             throw new \RuntimeException($e->getMessage(), $e->getCode(), $e);
         }

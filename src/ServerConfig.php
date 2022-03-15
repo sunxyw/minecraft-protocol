@@ -20,4 +20,6 @@ class ServerConfig
     public string $assignRoleCommand;
 
     public string $removeRoleCommand;
+
+    public \Closure $onCommandDispatched;
 }
