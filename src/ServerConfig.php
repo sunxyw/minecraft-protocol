@@ -22,4 +22,6 @@ class ServerConfig
     public string $removeRoleCommand;
 
     public \Closure $onCommandDispatched;
+
+    public \Closure $parsePlayers;
 }

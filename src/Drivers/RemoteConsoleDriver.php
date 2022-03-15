@@ -12,20 +12,18 @@ use xPaw\SourceQuery\SourceQuery;
  * Class RemoteConsoleDriver.
  * supports remote console (rcon) protocol.
  */
-class RemoteConsoleDriver implements DriverInterface
+class RemoteConsoleDriver extends AbstractDriver
 {
     private SourceQuery $connection;
-
-    private ServerConfig $config;
 
     /** {@inheritDoc} */
     public function __construct(ServerConfig $config)
     {
+        parent::__construct($config);
         try {
             $this->connection = new SourceQuery();
             $this->connection->Connect($config->host, $config->port);
             $this->connection->SetRconPassword($config->password);
-            $this->config = $config;
         } catch (SourceQueryException $e) {
             throw new \RuntimeException($e->getMessage(), $e->getCode(), $e);
         }
@@ -42,12 +40,14 @@ class RemoteConsoleDriver implements DriverInterface
     }
 
     /** {@inheritDoc} */
-    public function dispatchCommand(string $command, array $args = []): string
+    public function dispatchCommand(string $command, array $args = [], bool $keepStyle = false): string
     {
         try {
             $result = $this->connection->Rcon($command . ' ' . implode(' ', $args));
-            $callback = $this->config->onCommandDispatched;
-            $callback($this, $command, $args, $result);
+            if (!$keepStyle) {
+                MinecraftUtils::removeStyleCode($result);
+            }
+            $this->event('command.dispatched', $command, $args, $result);
             return $result;
         } catch (SourceQueryException $e) {
             throw new \RuntimeException($e->getMessage(), $e->getCode(), $e);
@@ -63,8 +63,7 @@ class RemoteConsoleDriver implements DriverInterface
             return [];
         }
 
-        MinecraftUtils::removeStyleCode($raw_list);
-        return MinecraftUtils::parsePlayers($raw_list);
+        return $this->parsePlayers($raw_list);
     }
 
     /** {@inheritDoc} */
