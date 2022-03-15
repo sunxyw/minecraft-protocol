@@ -36,7 +36,7 @@ class ServerConfig
      */
     public function addListener(string $event, callable $listener): void
     {
-        $this->listeners[$event] = $listener;
+        $this->listeners[$event][] = $listener;
     }
 
     /**
