@@ -42,8 +42,8 @@ class MinecraftUtils
      */
     public static function parsePlayers(string $string): array
     {
-        preg_match_all('/\[\S*](\w{4,16})/', $string, $matches);
-        return $matches[1];
+        preg_match_all('/\w{4,16}/', $string, $matches);
+        return $matches[0];
     }
 
     /**
