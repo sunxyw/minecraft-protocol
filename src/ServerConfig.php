@@ -52,7 +52,7 @@ class ServerConfig
                     'bukkit' => Commands\BukkitCommands::class,
 //                    'bungeecord' => Commands\BungeeCommands::class,
                 ];
-                $server_config->commands = new $internal[$config['driver']]();
+                $server_config->commands = new $internal[$config['commands']]();
             }
         }
         if (isset($config['permission_commands'])) {
@@ -63,7 +63,7 @@ class ServerConfig
                     'groupmanager' => Commands\PermissionCommands\GroupManagerPermissionCommands::class,
                     'upc' => Commands\PermissionCommands\UltraPermissionsPermissionCommands::class,
                 ];
-                $server_config->permissionCommands = new $internal[$config['driver']]();
+                $server_config->permissionCommands = new $internal[$config['permission_commands']]();
             }
         }
         if (isset($config['player_parser'])) {
