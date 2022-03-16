@@ -34,7 +34,6 @@ class ServerConfig
      * @param array $config
      * @return static
      */
-    #[Pure]
     public static function fromArray(array $config): self
     {
         $server_config = new self();
@@ -42,6 +41,28 @@ class ServerConfig
         $server_config->host = $config['host'];
         $server_config->port = $config['port'];
         $server_config->password = $config['password'];
+        if (isset($config['commands'])) {
+            if (is_a($config['commands'], CommandsInterface::class, true)) {
+                $server_config->commands = new $config['commands']();
+            } else {
+                $internal = [
+                    'bukkit' => Commands\BukkitCommands::class,
+//                    'bungeecord' => Commands\BungeeCommands::class,
+                ];
+                $server_config->commands = new $internal[$config['driver']]();
+            }
+        }
+        if (isset($config['permission_commands'])) {
+            if (is_a($config['permission_commands'], PermissionCommandsInterface::class, true)) {
+                $server_config->permissionCommands = new $config['permission_commands']();
+            } else {
+                $internal = [
+                    'groupmanager' => Commands\PermissionCommands\GroupManagerPermissionCommands::class,
+                    'upc' => Commands\PermissionCommands\UltraPermissionsPermissionCommands::class,
+                ];
+                $server_config->permissionCommands = new $internal[$config['driver']]();
+            }
+        }
         return $server_config;
     }
 

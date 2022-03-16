@@ -28,6 +28,28 @@ class Config
     }
 
     /**
+     * Create a config instance from array.
+     *
+     * @param array $config
+     * @return static
+     */
+    public static function fromArray(array $config): self
+    {
+        $instance = new self();
+        if (count($config['servers'])) {
+            foreach ($config['servers'] as $name => $server_config) {
+                $instance->addServer($name, ServerConfig::fromArray($server_config));
+            }
+        }
+        if (count($config['default_parsers'])) {
+            foreach ($config['default_parsers'] as $name => $parser_class) {
+                $instance->setDefaultParser($name, $parser_class);
+            }
+        }
+        return $instance;
+    }
+
+    /**
      * Add server config.
      *
      * @param string $name
