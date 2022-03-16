@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\ExpectedValues;
 use JetBrains\PhpStorm\Pure;
 use Sunxyw\MinecraftProtocol\Commands\CommandsInterface;
 use Sunxyw\MinecraftProtocol\Commands\PermissionCommands\PermissionCommandsInterface;
+use Sunxyw\MinecraftProtocol\Parser\ParserInterface;
 use Sunxyw\MinecraftProtocol\ServerConfig;
 use Sunxyw\MinecraftProtocol\ServerHolder;
 
@@ -76,6 +77,9 @@ abstract class AbstractDriver implements DriverInterface
     {
         if (isset($this->config->playerParser)) {
             $parser = $this->config->playerParser;
+            if ($parser instanceof ParserInterface) {
+                return $parser->parse($players);
+            }
             return $parser($players);
         }
         return ServerHolder::getConfig()->getDefaultParser('player')->parse($players);
