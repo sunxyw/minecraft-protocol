@@ -6,6 +6,7 @@ use JetBrains\PhpStorm\ArrayShape;
 use JetBrains\PhpStorm\Pure;
 use Sunxyw\MinecraftProtocol\Commands\CommandsInterface;
 use Sunxyw\MinecraftProtocol\Commands\PermissionCommands\PermissionCommandsInterface;
+use Sunxyw\MinecraftProtocol\Parser\ParserInterface;
 
 /**
  * Class ServerConfig.
@@ -22,7 +23,7 @@ class ServerConfig
 
     private array $listeners = [];
 
-    public \Closure $playerParser;
+    public \Closure|ParserInterface $playerParser;
 
     private CommandsInterface $commands;
 
