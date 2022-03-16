@@ -66,6 +66,9 @@ class ServerConfig
                 $server_config->permissionCommands = new $internal[$config['driver']]();
             }
         }
+        if (isset($config['player_parser'])) {
+            $server_config->playerParser = $config['player_parser'];
+        }
         return $server_config;
     }
 
