@@ -57,7 +57,7 @@ class RemoteConsoleDriver extends AbstractDriver
     /** {@inheritDoc} */
     public function getOnlinePlayers(): array
     {
-        $raw_list = $this->dispatchCommand('list');
+        $raw_list = $this->dispatchCommand($this->commands->listOnlinePlayers());
 
         if (empty($raw_list)) {
             return [];
@@ -84,12 +84,7 @@ class RemoteConsoleDriver extends AbstractDriver
     {
         MinecraftUtils::validateUsername($player);
         $role = strtolower($role);
-        if (isset($this->config->allowedRoles) && !in_array($role, $this->config->allowedRoles, true)) {
-            throw new \InvalidArgumentException("Role $role is not allowed");
-        }
-        $command = $this->config->assignRoleCommand;
-        $command = str_replace(['{player}', '{role}'], [$player, $role], $command);
-        $this->dispatchCommand($command);
+        $this->dispatchCommand($this->permissionCommands->addPlayerToGroup($player, $role));
     }
 
     /** {@inheritDoc} */
@@ -97,12 +92,7 @@ class RemoteConsoleDriver extends AbstractDriver
     {
         MinecraftUtils::validateUsername($player);
         $role = strtolower($role);
-        if (isset($this->config->allowedRoles) && !in_array($role, $this->config->allowedRoles, true)) {
-            throw new \InvalidArgumentException("Role $role is not allowed");
-        }
-        $command = $this->config->removeRoleCommand;
-        $command = str_replace(['{player}', '{role}'], [$player, $role], $command);
-        $this->dispatchCommand($command);
+        $this->dispatchCommand($this->permissionCommands->removePlayerFromGroup($player, $role));
     }
 
     /** {@inheritDoc} */
@@ -114,7 +104,7 @@ class RemoteConsoleDriver extends AbstractDriver
         if (!in_array($action, $allowed_actions)) {
             throw new \InvalidArgumentException("Action $action is not allowed");
         }
-        $this->dispatchCommand("whitelist $action $player");
+        $this->dispatchCommand($this->commands->{$action . 'Whitelist'}($player));
     }
 
     /** {@inheritDoc} */

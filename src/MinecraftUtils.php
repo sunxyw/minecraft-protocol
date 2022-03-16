@@ -35,18 +35,6 @@ class MinecraftUtils
     }
 
     /**
-     * Parse players' usernames from a string.
-     *
-     * @param string $string
-     * @return array
-     */
-    public static function parsePlayers(string $string): array
-    {
-        preg_match_all('/\w{4,16}/', $string, $matches);
-        return $matches[0];
-    }
-
-    /**
      * Build a Minecraft-compatible component string.
      *
      * @param $text
