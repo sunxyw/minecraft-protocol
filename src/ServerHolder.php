@@ -36,6 +36,16 @@ class ServerHolder
     }
 
     /**
+     * Get the config.
+     *
+     * @return Config
+     */
+    public static function getConfig(): Config
+    {
+        return self::getInstance()->config;
+    }
+
+    /**
      * Set the config of the server holder.
      *
      * @param Config $config
@@ -44,7 +54,6 @@ class ServerHolder
     public static function setConfig(Config $config): void
     {
         self::getInstance()->config = $config;
-
     }
 
     /**
@@ -56,7 +65,7 @@ class ServerHolder
     public static function getServer(string $name): DriverInterface
     {
         if (!array_key_exists($name, self::getInstance()->servers)) {
-            $server_config = self::getInstance()->config->getServer($name);
+            $server_config = self::getConfig()->getServer($name);
             $driver = $server_config->driver;
             $server = new $driver($server_config);
             self::getInstance()->servers[$name] = $server;

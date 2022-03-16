@@ -17,6 +17,8 @@ class Config
     #[ArrayShape(['string' => ParserInterface::class])]
     private array $defaultParsers;
 
+    private array $cache = [];
+
     public function __construct()
     {
         $this->servers = [];
@@ -56,7 +58,11 @@ class Config
      */
     public function getDefaultParser(string $name): ParserInterface
     {
-        return $this->defaultParsers[$name];
+        $parser = $this->defaultParsers[$name];
+        if (!isset($this->cache[$parser])) {
+            $this->cache[$parser] = new $parser();
+        }
+        return $this->cache[$parser];
     }
 
     /**

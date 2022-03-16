@@ -7,6 +7,7 @@ use Sunxyw\MinecraftProtocol\Commands\CommandsInterface;
 use Sunxyw\MinecraftProtocol\Commands\PermissionCommands\PermissionCommandsInterface;
 use Sunxyw\MinecraftProtocol\MinecraftUtils;
 use Sunxyw\MinecraftProtocol\ServerConfig;
+use Sunxyw\MinecraftProtocol\ServerHolder;
 
 /**
  * Class AbstractDriver.
@@ -65,7 +66,7 @@ abstract class AbstractDriver implements DriverInterface
     /**
      * Parse players' usernames from a string.
      * if custom players parser is set, it will use it.
-     * otherwise, the built-in parser will be used.
+     * otherwise, the default parser will be used.
      *
      * @param string $players
      * @return array
@@ -76,6 +77,6 @@ abstract class AbstractDriver implements DriverInterface
             $parser = $this->config->playerParser;
             return $parser($players);
         }
-        return MinecraftUtils::parsePlayers($players);
+        return ServerHolder::getConfig()->getDefaultParser('player')->parse($players);
     }
 }
