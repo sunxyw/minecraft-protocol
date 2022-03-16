@@ -58,6 +58,7 @@ abstract class AbstractDriver implements DriverInterface
      */
     protected function event(string $event, ...$args): void
     {
+        $args = array_merge($args, $this->config->extraEventData);
         foreach ($this->config->getListeners($event) as $listener) {
             $listener(...$args);
         }

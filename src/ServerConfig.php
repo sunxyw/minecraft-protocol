@@ -28,6 +28,8 @@ class ServerConfig
 
     private PermissionCommandsInterface $permissionCommands;
 
+    public array $extraEventData = [];
+
     /**
      * Create a new ServerConfig instance from an array.
      *
@@ -41,6 +43,7 @@ class ServerConfig
         $server_config->host = $config['host'];
         $server_config->port = $config['port'];
         $server_config->password = $config['password'];
+        $server_config->extraEventData = $config['extra_event_data'] ?? [];
         if (isset($config['commands'])) {
             if (is_a($config['commands'], CommandsInterface::class, true)) {
                 $server_config->commands = new $config['commands']();
