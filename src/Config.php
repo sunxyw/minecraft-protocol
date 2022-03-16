@@ -41,7 +41,7 @@ class Config
                 $instance->addServer($name, ServerConfig::fromArray($server_config));
             }
         }
-        if (count($config['default_parsers'])) {
+        if (count($config['default_parsers'] ?? [])) {
             foreach ($config['default_parsers'] as $name => $parser_class) {
                 $instance->setDefaultParser($name, $parser_class);
             }
