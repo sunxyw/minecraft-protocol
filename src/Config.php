@@ -98,4 +98,18 @@ class Config
     {
         $this->defaultParsers[$name] = $parser;
     }
+
+    /**
+     * Add event listener to all servers.
+     *
+     * @param string $name
+     * @param callable $listener
+     * @return void
+     */
+    public function addListener(string $name, callable $listener): void
+    {
+        foreach ($this->servers as $server) {
+            $server->addListener($name, $listener);
+        }
+    }
 }
