@@ -50,7 +50,7 @@ class ServerConfig
             } else {
                 $internal = [
                     'bukkit' => Commands\BukkitCommands::class,
-//                    'bungeecord' => Commands\BungeeCommands::class,
+                    'bungeecord' => Commands\BungeecordCommands::class,
                 ];
                 $server_config->commands = new $internal[$config['commands']]();
             }
