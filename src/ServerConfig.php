@@ -24,9 +24,9 @@ class ServerConfig
 
     public \Closure $playerParser;
 
-    public CommandsInterface $commands;
+    private CommandsInterface $commands;
 
-    public PermissionCommandsInterface $permissionCommands;
+    private PermissionCommandsInterface $permissionCommands;
 
     /**
      * Create a new ServerConfig instance from an array.
@@ -42,8 +42,6 @@ class ServerConfig
         $server_config->host = $config['host'];
         $server_config->port = $config['port'];
         $server_config->password = $config['password'];
-        $server_config->commands = $config['commands'];
-        $server_config->permissionCommands = $config['permissionCommands'];
         return $server_config;
     }
 
@@ -69,5 +67,39 @@ class ServerConfig
     public function getListeners(string $event): array
     {
         return $this->listeners[$event] ?? [];
+    }
+
+    /**
+     * @param $commands
+     * @return void
+     */
+    public function setCommands($commands): void
+    {
+        $this->commands = new $commands();
+    }
+
+    /**
+     * @return CommandsInterface
+     */
+    public function getCommands(): CommandsInterface
+    {
+        return $this->commands;
+    }
+
+    /**
+     * @param $permissionCommands
+     * @return void
+     */
+    public function setPermissionCommands($permissionCommands): void
+    {
+        $this->permissionCommands = new $permissionCommands();
+    }
+
+    /**
+     * @return PermissionCommandsInterface
+     */
+    public function getPermissionCommands(): PermissionCommandsInterface
+    {
+        return $this->permissionCommands;
     }
 }

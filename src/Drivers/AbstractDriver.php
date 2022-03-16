@@ -3,9 +3,9 @@
 namespace Sunxyw\MinecraftProtocol\Drivers;
 
 use JetBrains\PhpStorm\ExpectedValues;
+use JetBrains\PhpStorm\Pure;
 use Sunxyw\MinecraftProtocol\Commands\CommandsInterface;
 use Sunxyw\MinecraftProtocol\Commands\PermissionCommands\PermissionCommandsInterface;
-use Sunxyw\MinecraftProtocol\MinecraftUtils;
 use Sunxyw\MinecraftProtocol\ServerConfig;
 use Sunxyw\MinecraftProtocol\ServerHolder;
 
@@ -21,11 +21,11 @@ abstract class AbstractDriver implements DriverInterface
     protected PermissionCommandsInterface $permissionCommands;
 
     /** {@inheritDoc} */
-    public function __construct(ServerConfig $config)
+    #[Pure] public function __construct(ServerConfig $config)
     {
         $this->config = $config;
-        $this->commands = $config->commands;
-        $this->permissionCommands = $config->permissionCommands;
+        $this->commands = $config->getCommands();
+        $this->permissionCommands = $config->getPermissionCommands();
     }
 
     /** {@inheritDoc} */
