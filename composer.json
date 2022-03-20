@@ -16,7 +16,6 @@
   ],
   "homepage": "https://github.com/sunxyw/minecraft-protocol",
   "require": {
-    "illuminate/support": "~9",
     "xpaw/php-source-query-class": "^2.1"
   },
   "require-dev": {
