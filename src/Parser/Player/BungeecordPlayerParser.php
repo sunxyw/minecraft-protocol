@@ -10,7 +10,7 @@ class BungeecordPlayerParser implements \Sunxyw\MinecraftProtocol\Parser\ParserI
      */
     public function parse(string $data): mixed
     {
-        preg_match_all('/\[(\w+)]\n\((\d+)\):\n(.*)/', $data, $matches);
+        preg_match_all('/\[(\w+)][\s\n]+\((\d+)\):[\s\n]+(.*)/', $data, $matches);
         $players = [];
         foreach ($matches[0] as $i => $match) {
             $server = $matches[1][$i];
