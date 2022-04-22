@@ -18,7 +18,7 @@ class MinecraftUtils
      */
     public static function validateUsername(string $username): void
     {
-        if (!preg_match('/^\w{4,16}$/', $username)) {
+        if (!preg_match('/^\w{3,16}$/', $username)) {
             throw new InvalidArgumentException('Invalid username');
         }
     }
