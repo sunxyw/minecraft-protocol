@@ -31,15 +31,5 @@
     "psr-4": {
       "Sunxyw\\MinecraftProtocol\\Tests\\": "tests"
     }
-  },
-  "extra": {
-    "laravel": {
-      "aliases": {
-        "MinecraftProtocol": "Sunxyw\\MinecraftProtocol\\Facades\\MinecraftProtocol"
-      },
-      "providers": [
-        "Sunxyw\\MinecraftProtocol\\MinecraftProtocolServiceProvider"
-      ]
-    }
   }
 }
